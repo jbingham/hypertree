@@ -1,0 +1,94 @@
+<html>
+<head>
+</head>
+<body>
+<h3>Sugen Bioinformatics API</h3>
+
+This is the central place where all bioinformatics source code, 
+command-line tools, and visualization applications can be found.
+Included are complete tools and classes for
+<ul>
+<li>importing and exporting sequences into and out of a relational database</li>
+<li>translating sequences</li>
+<li>assembling features from multiple exons</li>
+<li>visualizing phylogenetic tree data </li>
+<li>graphically browsing a genome and viewing multiple alignments</li>
+<li>reading and converting various file formats</li>
+<li>performing custom algorithmic analysis</li>
+<li>building new algorithms, applications, and tools</li>
+</ul>
+
+<h3>Frequently Asked Questions</h3>
+
+<ul>
+<li><a href="#me">What's in it for me?</a></li>
+<li><a href="#use">How do I use this stuff?</a></li>
+<li><a href="#run">How do I run the programs documented here?</a></li>
+<li><a href="#Java">Why Java?</a></li>
+<li><a href="#slow">Isn't Java too slow?</a></li>
+</ul>
+
+<a name="#me"></a>
+<h4>What's in it for me?</h4>
+There are many very common tasks that need to be performed in the course of
+bioinformatics analysis. Much of the work is 'plumbing' - stringing together
+separate publicly available and home-grown tools. Often, this is done inside
+a shell script, Perl script, or simple program. In every bioinformatics group, 
+people write many of the same scripts, the same parsers, and the same database 
+access tools. This API provides a Java implementation of many of the basic
+classes and utilities every bioinformatics group needs. 
+
+<a name="#Java"></a>
+<h4>Why Java?</h4>
+To minimize development time. We want to do science, not write code. It takes
+much less time to write in Java than in C or C++. And Java, as an
+object-oriented language, supports code reuse. We don't have to constantly
+rewrite code to perform similar tasks. Finally, Java runs on several
+platforms. Since bioinformatics has emerged as an inherently cross-platform
+field, with algorithms and such written for Mac, Unix, and Windows, a
+cross-platform language is the ideal choice.
+
+<a name="#slow"></a>
+<h4>Isn't Java too slow?</h4>
+No. We're not implementing Smith-Waterman or BLAST in Java. That would be too
+slow, it's true. What we've implemented are many of the tasks usually written
+in Perl or a scripting language. For parsing, database access, and other tasks
+of this sort, Java performance is simply not an issue. For example, when 
+importing sequences to a relational database, the bottleneck is not Java but
+database access. This would be the case in C or C++ too. Even the
+visualization tools, which do some relatively intense graphics computations
+for enormous sequences, perform perfectly acceptably on any modern computer
+that supports the Java platform. In short, performance has not been a problem.
+
+<a name="#use"></a>
+<h4>How do I use this stuff?</h4>
+There are two ways to use this API: as a user or as a developer. For the user,
+the API documents many useful applications and command-line tools. These can
+be found in the package, com.sugen.app. For the developer, all of the other
+packages are useful, too. They have been used to build all of the tools in
+that package. When writing new tools, the classes and packages already
+available provide much of what you will likely need to get started. Ideally,
+these classes should make life easy for the developer as much as for the user.
+Wherever possible, classes are written in comformance with the JavaBean
+standards. This means that, with minimal effort, they can be made available to
+graphical IDEs. For now, we've used the Java API mostly for hand-coding.
+<p>
+<b>Caveat</b>: Serialization issues have not been properly addressed. If using
+the beans as beans, there will be problems with serialization.
+
+<a name="#run"></a>
+<h4>How do I run the Java programs documented here?</h4>
+You need to have a current Java2 virtual machine installed on your computer.
+Go to <a href="http://www.javasoft.com/">JavaSoft</a> and follow the links to the
+download page for your platform.
+Once you have a Java VM installed, download the 
+Java source code or get a copy of the jar file. All of the programs
+documented here can be executed by typing,<pre>
+	java com.sugen.app.SugenProgram
+</pre> This will either launch a full-blown GUI application, or run a 
+command-line too. Thanks to the cross-platform nature of the Java language,
+these tools will run on any operating system that supports Java, including 
+Windows 9x/NT, Unix, Linux, and MacOS. Executable jar files are also available
+for some of the stand-alone applications.
+</body>
+</html>

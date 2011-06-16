@@ -1,0 +1,23 @@
+<html>
+<head>
+<meta author="Jonathan Bingham">
+</head>
+<body>
+Higher level utility built on top of the Java IO package.
+<p>
+The two fundamental types of classes are InputReaders and OutputWriters.
+These differ from java.io.Reader and java.io.Writer in that they support the
+reading and writing of arbitrary Objects without automatically converting them
+using their toString() methods. These various IO classes will often have an
+associated interface containing constants specific to a given file format.
+Eg, the GenBankConstants file contains constants that apply to GenBank
+flatfiles; these are used by the GenBankReader when parsing flatfiles.
+<p>
+For bioinformatics uses, the SequenceReaders and SequenceWriters input and
+output entire Sequence objects in standard parseable text formats. 
+<p>
+GUI and other applications that wish to allow users to specify readers and
+writers as customizable parameters may take advantage of the io.properties
+file, which defines the available readers and writers.
+</body>
+</html>

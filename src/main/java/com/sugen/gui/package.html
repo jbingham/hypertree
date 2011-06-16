@@ -1,0 +1,31 @@
+<html>
+<head>
+<meta author="Jonathan Bingham">
+</head>
+<body>
+General-purpose graphical user interface classes for building complete
+component-based Swing applications. 
+<p>
+A consistent JavaBean event model is used for communication between the
+various parts of an application. The AppBean interface and the ActionConstants
+provide some of the standard properties through which components notify each
+other of changes to state. Applications designed in the component paradigm can
+be easily modularized and reconnected to form new applications, thanks to the
+standardized design pattern. 
+<p>
+Since Java GUI design still lacks the dearth of pre-written
+templates, convenience components, and standardized code common to the
+Windows and Macintosh worlds, some of the common functionalities have been
+implemented here. This includes the FontChooser, Ruler, AppDesktop, and other
+classes.
+<p>
+Also, it's worth mentioning the various Dialog classes. These were written to
+overcome limitations of JOptionPane, to facilitate the creation of simple
+dialogs. The main motivation was that the Ok and Cancel buttons on a 
+JOptionPane automatically close the dialog, and no error message can first
+be popped up in a second dialog. This limitation can be worked around in 
+various ways, but a decision was made to write these classes instead. They
+form the basis for the com.sugen.gui.form package.
+
+</body>
+</html>
