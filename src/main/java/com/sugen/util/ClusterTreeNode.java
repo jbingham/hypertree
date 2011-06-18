@@ -9,8 +9,9 @@ import javax.swing.tree.*;
  * @author Jonathan Bingham
  */
 public class ClusterTreeNode extends DefaultMutableTreeNode {
-    private double branchLength;
-    private int bootstrapReplicates;
+	private static final long serialVersionUID = 1L;
+	private double branchLength;
+    private double bootstrapReplicates;
 
     /**
      * Default constructor. Null label, branch length equals one.
@@ -52,7 +53,7 @@ public class ClusterTreeNode extends DefaultMutableTreeNode {
      * Bootstrap replicates, or zero (0) if there aren't any.
      * @return number of replicates; non-negative
      */
-    public int getBootstrapReplicates() {
+    public double getBootstrapReplicates() {
         return bootstrapReplicates;
     }
 
@@ -70,7 +71,7 @@ public class ClusterTreeNode extends DefaultMutableTreeNode {
      * Bootstrap replicates, or zero (0) if there aren't any.
      * @param replicates non-negative value
      */
-    public void setBootstrapReplicates(int replicates) {
+    public void setBootstrapReplicates(double replicates) {
     	if(replicates < 0)
     		throw new IllegalArgumentException("Bootstrap replicates cannot be negative.");
         bootstrapReplicates = replicates;

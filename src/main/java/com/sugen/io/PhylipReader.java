@@ -66,10 +66,15 @@ public class PhylipReader extends TreeReader {
             while(input.charAt(retval) == ',');
             
             //determine branch length of node
-            if(input.charAt(retval + 1) == ':')
+            if (input.charAt(retval) == ')' 
+            	  && Character.isDigit(input.charAt(retval + 1))) {
+            	retval = checkBootstrap(input, retval + 1, root);
+                retval = parseBranchLength(input, retval + 1, root);
+            } else if(input.charAt(retval + 1) == ':') {
                 retval = parseBranchLength(input, retval + 2, root);
-            else
+            } else {
                 ++retval;
+            }
 
             return retval;
         }
@@ -86,13 +91,14 @@ public class PhylipReader extends TreeReader {
     protected int parseLeaf(String input, int leafLabelStart,
                             ClusterTreeNode leaf) {
         int branchLengthStart = parseLeafLabel(input, leafLabelStart, leaf);
-        //System.out.println(leaf.getUserObject());
+        int end = branchLengthStart;
+//        System.err.println("leaf: " + leaf.getUserObject());
+        
         //Parse branch length
         if(input.charAt(branchLengthStart) == ':')
-            return parseBranchLength(input, ++branchLengthStart, leaf);
-        //No branch lengths
-        else
-            return branchLengthStart;
+            end = parseBranchLength(input, ++branchLengthStart, leaf);
+            
+        return end;
     }
 
     /**
@@ -115,12 +121,12 @@ public class PhylipReader extends TreeReader {
                 end = Math.max(nextComma, nextParen);
         }
         if(end == -1) {
-            //System.out.println("eof");
+            System.err.println("eof");
             return input.length();
         }
         String label = input.substring(start, end);
         leaf.setUserObject(label);
-//System.err.println(label);
+        
         return end;
     }
 
@@ -128,8 +134,10 @@ public class PhylipReader extends TreeReader {
      * @param leaf - its branchLength is set from parsed input
      * @return index of character after leaf
      */
-    protected int parseBranchLength(String input, int start,
-                                    ClusterTreeNode leaf) {
+    protected int parseBranchLength(
+    		String input, 
+    		int start,
+            ClusterTreeNode leaf) {
         int nextComma = input.indexOf(',', start);
         int closeParen = input.indexOf(')', start);
         int end;
@@ -140,33 +148,56 @@ public class PhylipReader extends TreeReader {
         //otherwise use the one that was found
         else
             end = Math.max(nextComma, closeParen);
-
+        
         // For bootstrap replicates, skip past the replicate count
         int openBracket = input.indexOf('[', start);
         int closeBracket = input.indexOf(']', start);
         if(openBracket != -1 && openBracket < end && closeBracket != -1) {
             String replicates = input.substring(openBracket + 1, closeBracket);
-            leaf.setBootstrapReplicates(Integer.parseInt(replicates));
-//System.err.println("Replicates: " + replicates);
+            leaf.setBootstrapReplicates(Double.parseDouble(replicates));
+//            System.err.println("Replicates: " + replicates);
             end = openBracket;
         }
 
-        //System.err.println("start:" + start + " nextComma:" + nextComma
-        //				   + " next):" + closeParen);
         String lengthString = input.substring(start, end);
         double length = Double.valueOf(lengthString).doubleValue();
         if(length < 0)
         	length = 0;
         leaf.setBranchLength(length);
+//        System.err.println("length=" + length);
 
         if(end == openBracket && closeBracket != -1)
             end = closeBracket + 1;
-//System.err.println(length);
-
+        
         return end;
     }
 
-    public Collection readAll() {
+    /**
+    * @param leaf - its branchLength is set from parsed input
+    * @return index of character after leaf
+    */
+    private int checkBootstrap(String input, int end, ClusterTreeNode leaf) {
+//    	System.err.println("checkBootstrap: "
+//    			+ input.substring(Math.max(0, end-40), end)
+//    			+ input.charAt(end));
+    	
+    	int colon = input.indexOf(':', end);
+    	if (colon < 0 || colon > input.length())
+    		return end;
+    	
+    	String bootstrap = input.substring(end, colon);
+//    	System.err.println("bootstrap=" + bootstrap);
+    	
+    	try {
+    		leaf.setBootstrapReplicates(Double.parseDouble(bootstrap));
+    	} catch(NumberFormatException e) {
+    		e.printStackTrace();
+    	}
+    	
+		return colon + 1;
+	}
+
+	public Collection readAll() {
         throw new UnsupportedOperationException();
     }
 }
