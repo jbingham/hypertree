@@ -1,0 +1,71 @@
+FEATURES
+
+HyperTree includes many features for navigating large trees, such as the ability to:
+
+* visualize large trees with hundreds of nodes or more
+* rotate and drag the display in cartesian space
+* search and select nodes
+* copy clusters for pasting into other programs
+* color-code branches
+* label branches (eg, common family members)
+* zoom in and out
+* view phylogenetic trees and other hierarchical clusters, such as gene expression profile clusters
+* run on several platforms: Mac, Windows, Unix/Linux
+
+DOWNLOAD
+
+HyperTree is freely available for non-commercial use. The download includes the Java jar file, source code and sample files.
+
+To run the program, you must have Java 5 or higher installed.
+
+On Macintosh or Windows, simply double-click the jar file to launch the program.
+On Unix and Linux, launch from the command line:
+   java -jar HyperTree.jar
+Enjoy!
+
+USAGE TIPS
+
+Currently no comprehensive usage manual exists for HyperTree. However, here is a brief summary of 'non-obvious' features.
+
+Mouse Controls
+
+* To rotate the tree, drag while holding down the shift key.
+
+Reading and Writing Tree Files
+
+* HyperTree reads and saves trees in Phylip format. 
+* It displays one tree at a time; if a file contains multiple trees, only the first tree will be displayed.
+
+Selecting Nodes and Branches
+
+* Labels appear on mouseover
+* Click a label or node to select it
+* Hold down the "SHIFT" or "CTRL" key when clicking to add multiple selections
+* Select an internal node and then choose "Select Children" to select an entire subtree
+* Click "Copy" or "CTRL C" to copy all selections to the system clipboard. Then you can paste them into other programs, such as the data retrieval tool.
+
+Colorizing the Tree
+
+* Choose "Color" to change the color of all selected labels and nodes
+* Choose "Export Colors" from the "File" menu to save the colors
+
+You can create a color file independently of HyperTree. To import a color file, choose "Import Colors" from the "File" menu. A valid color file has the following format:
+	nodeLabel1  color1
+	nodeLabel2  color2
+
+Node labels are case-sensitive. They must exactly match the labels in the tree. Node labels are separated by white space from the color.
+
+Colors can be specified in the color file in one of three ways. A color can be either an RGB value, a color name in plain English using any of the standard color names recognized by Netscape and Internet Explorer; or an arbitrary identifier, in which case HyperTree will attempt to automatically assign a color by default. E.g.,
+	ZC123.4   darkGreen
+	ZC239.7   0,0,255
+	ZC373.4   tyrosineKinase
+
+HyperTree was written by Jonathan Bingham of Sugen, Inc. and is made freely available for non-commercial use.
+
+CITATIONS
+
+If you use Hypertree in a publication, please cite:
+  Visualizing harge hierarchical clusters in hyperbolic space
+  J. Bingham, S Sudarsanam
+  Bioinformatics (2000) 16(7): 660-1 
+
