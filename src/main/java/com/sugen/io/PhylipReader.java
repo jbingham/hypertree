@@ -68,7 +68,7 @@ public class PhylipReader extends TreeReader {
             //determine branch length of node
             if (input.charAt(retval) == ')' 
             	  && Character.isDigit(input.charAt(retval + 1))) {
-            	retval = checkBootstrap(input, retval + 1, root);
+            	retval = parseNodeLabel(input, retval + 1, root);
                 retval = parseBranchLength(input, retval + 1, root);
             } else if(input.charAt(retval + 1) == ':') {
                 retval = parseBranchLength(input, retval + 2, root);
@@ -176,7 +176,7 @@ public class PhylipReader extends TreeReader {
     * @param leaf - its branchLength is set from parsed input
     * @return index of character after leaf
     */
-    private int checkBootstrap(String input, int end, ClusterTreeNode leaf) {
+    private int parseNodeLabel(String input, int end, ClusterTreeNode leaf) {
 //    	System.err.println("checkBootstrap: "
 //    			+ input.substring(Math.max(0, end-40), end)
 //    			+ input.charAt(end));
@@ -185,11 +185,11 @@ public class PhylipReader extends TreeReader {
     	if (colon < 0 || colon > input.length())
     		return end;
     	
-    	String bootstrap = input.substring(end, colon);
+    	String nodeLabel = input.substring(end, colon);
 //    	System.err.println("bootstrap=" + bootstrap);
     	
     	try {
-    		leaf.setBootstrapReplicates(Double.parseDouble(bootstrap));
+    		leaf.setUserObject(nodeLabel);
     	} catch(NumberFormatException e) {
     		e.printStackTrace();
     	}
