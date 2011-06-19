@@ -33,7 +33,7 @@ Mouse Controls
 
 Reading and Writing Tree Files
 
-* HyperTree reads and saves trees in Phylip format. 
+* HyperTree reads and saves trees in Phylip / Newick format. 
 * It displays one tree at a time; if a file contains multiple trees, only the first tree will be displayed.
 
 Selecting Nodes and Branches
