@@ -197,7 +197,7 @@ public class PhylipReader extends TreeReader {
 		return colon + 1;
 	}
 
-	public Collection readAll() {
+	public Collection<?> readAll() {
         throw new UnsupportedOperationException();
     }
 }

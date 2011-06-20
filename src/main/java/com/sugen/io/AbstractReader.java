@@ -9,8 +9,10 @@ import java.util.*;
  *
  * @author Jonathan Bingham
  */
-abstract public class AbstractReader
-    implements InputReader {
+abstract public class AbstractReader implements InputReader {
+
+	// Have to either use this or the BufferedReader, NOT both
+    protected InputStream inputStream; 
     protected BufferedReader reader;
     protected Object input;
 
@@ -24,6 +26,7 @@ abstract public class AbstractReader
      *
      */
     public AbstractReader() {
+    	inputStream = System.in;
         reader = new BufferedReader(new InputStreamReader(System.in));
     }
 
@@ -33,7 +36,7 @@ abstract public class AbstractReader
      * return a Collection of Objects of this Class type.
      * @return Object.class
      */
-    public Class getInputClass() {
+    public Class<?> getInputClass() {
         return Object.class;
     }
 
@@ -45,6 +48,7 @@ abstract public class AbstractReader
     }
 
     public void setInput(InputStream is) {
+    	inputStream = is;
         reader = new BufferedReader(new InputStreamReader(is));
         input = null;
     }
@@ -57,10 +61,13 @@ abstract public class AbstractReader
     }
 
     public void setInput(File file) throws FileNotFoundException {
-        if(file != null)
+        if(file != null) {
             reader = new BufferedReader(new FileReader(file));
-        else
+            inputStream = new FileInputStream(file);
+        } else {
             reader = new BufferedReader(new InputStreamReader(System.in));
+            inputStream = System.in;
+        }
         input = file;
     }
 
@@ -74,6 +81,7 @@ abstract public class AbstractReader
     public void setInput(String in) {
         reader = new BufferedReader(new StringReader(in));
         input = in;
+        inputStream = new ByteArrayInputStream(in.getBytes());
     }
 
     public String readLine() {
@@ -117,7 +125,7 @@ abstract public class AbstractReader
 
     public void remove() {}
 
-    public Collection readAll() {
+    public Collection<?> readAll() {
         return null;
     }
 

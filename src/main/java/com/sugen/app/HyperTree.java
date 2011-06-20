@@ -27,6 +27,7 @@ import com.sugen.gui.form.FormDialog;
 import com.sugen.gui.io.TreeReaderWriterUI;
 import com.sugen.gui.plot.HierarchicalClusterer;
 import com.sugen.gui.tree.TreeViewUI;
+import com.sugen.io.MultiTreeReader;
 import com.sugen.io.PhylipReader;
 import com.sugen.io.PhylipWriter;
 import com.sugen.io.TreeReader;
@@ -118,7 +119,7 @@ public class HyperTree implements Runnable {
 
 		// File IO
 		TreeReaderWriterUI io = new TreeReaderWriterUI();
-		io.getReaderUI().setReader(new PhylipReader());
+		io.getReaderUI().setReader(new MultiTreeReader());
 		io.getWriterUI().setWriter(new PhylipWriter());
 		app.addBean(io);
 
