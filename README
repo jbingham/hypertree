@@ -33,8 +33,11 @@ Mouse Controls
 
 Reading and Writing Tree Files
 
-* HyperTree reads and saves trees in Phylip / Newick format. 
-* It displays one tree at a time; if a file contains multiple trees, only the first tree will be displayed.
+* HyperTree reads trees in Phylip, Newick and PhyloXml formats. 
+* HyperTree can also generate a neighbor-joining tree from a distance matrix. 
+  Use: File -> Import Distance Matrix
+* HyperTree saves trees in Phylip/Newick format. 
+* HyperTree displays one tree at a time; if a file contains multiple trees, only the first tree will be displayed.
 
 Selecting Nodes and Branches
 
