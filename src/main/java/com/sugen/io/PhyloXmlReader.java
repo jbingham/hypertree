@@ -72,7 +72,7 @@ public class PhyloXmlReader extends TreeReader {
 				if (node != null)
 					parent = node;
 				
-				System.err.println("clade: " + depth);
+//				System.err.println("clade: " + depth);
 				
 		        node = new ClusterTreeNode();
 		        parent.add(node);
