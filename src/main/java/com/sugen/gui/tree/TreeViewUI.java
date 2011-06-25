@@ -89,7 +89,8 @@ public class TreeViewUI extends PlotViewUI {
                 
         actions.add(taxonomyUrlAction);
         actions.add(sequenceUrlAction);
-        sequenceUrlAction.putValue(KEY_SEPARATOR_AFTER, Boolean.TRUE);
+        actions.add(referenceDoiAction);
+        referenceDoiAction.putValue(KEY_SEPARATOR_AFTER, Boolean.TRUE);
         
         return actions;
     }
@@ -175,6 +176,36 @@ public class TreeViewUI extends PlotViewUI {
         return sequenceUrlAction;
     }
 
+
+    protected Action referenceDoiAction =
+        new AbstractAction("Open Reference...", Icons.get("emptyIcon24.gif")) {
+		private static final long serialVersionUID = 1L;
+        {
+            putValue(KEY_MENU, FILE_MENU);
+            putValue(KEY_LOCATION, VALUE_MENU_ONLY);
+        }
+
+        public void actionPerformed(ActionEvent e) {
+        	new SwingWorker() {
+        		public Object construct() {
+		            try {
+		            	Clade node = (Clade)getPlotView().getSelectionModel()
+		            		.getCollection().iterator().next();
+		            	String doi = node.getReferences().get(0).getDoi();
+						BrowserLauncher.openURL("http://dx.doi.org/" + doi);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					return null;
+				}
+			}.start();         
+        }
+    };
+
+    public Action getReferenceDoiAction() {
+        return referenceDoiAction;
+    }
+
     public void setStyle(String newStyle) {
         if(!style.equals(newStyle)) {
             // Remember selections for the new view
@@ -228,9 +259,13 @@ public class TreeViewUI extends PlotViewUI {
             	: null);
             
             taxonomyUrlAction.setEnabled(
-            		node != null && node.getTaxonomy().getUri() != null);
+            		node != null && node.getTaxonomy() != null
+            			&& node.getTaxonomy().getUri() != null);
             sequenceUrlAction.setEnabled(
-            		node != null && node.getSequence().getUri() != null);
+            		node != null && node.getSequence() != null
+            			&& node.getSequence().getUri() != null);
+            referenceDoiAction.setEnabled(
+            		node != null && !node.getReferences().isEmpty());
         }
         catch(NullPointerException npe) {
             npe.printStackTrace();
@@ -455,6 +490,8 @@ public class TreeViewUI extends PlotViewUI {
         popup.addSeparator();
         popup.add(taxonomyUrlAction);
         popup.add(sequenceUrlAction);
+		popup.addSeparator();
+    	popup.add(referenceDoiAction);
         return popup;
     }
 
