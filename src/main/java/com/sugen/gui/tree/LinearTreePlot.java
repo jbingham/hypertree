@@ -4,7 +4,7 @@ import java.awt.geom.Point2D;
 import java.util.*;
 import javax.swing.tree.*;
 
-import com.sugen.util.ClusterTreeNode;
+import com.sugen.util.Clade;
 import com.sugen.util.TreeDataModel;
 
 /**
@@ -62,8 +62,8 @@ public class LinearTreePlot
                 x = ( (Point2D) map.get(parent)).getX();
 
             //Shift right by the branch length
-            if (node instanceof ClusterTreeNode)
-                x += ( (ClusterTreeNode) node).getBranchLength();
+            if (node instanceof Clade)
+                x += ( (Clade) node).getBranchLength();
             else
                 x += 1;
             p.setLocation(x, p.getY());

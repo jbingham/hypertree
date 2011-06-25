@@ -27,7 +27,7 @@ public class HierarchicalCluster {
 	
 	private int[] leafCount; // # leaves under each node
 	private double joinDistance[]; // Inter-cluster distance; NOT branch length
-	private ClusterTreeNode[] nodes;
+	private Clade[] nodes;
 
 	/**
 	 * Constructor using default linkage method.
@@ -62,14 +62,14 @@ public class HierarchicalCluster {
 	 * @return a tree consisting of ClusterTreeNodes containing node labels and
 	 * branch lengths for each node
 	 */
-	public ClusterTreeNode cluster() {
+	public Clade cluster() {
 		init();
 		
 		int rootIndex = -1; // catch bugs
 		for (int i = 0; i < distanceMatrix.length - 1; i++)
 			rootIndex = iterate();
 		
-		ClusterTreeNode root = nodes[rootIndex];
+		Clade root = nodes[rootIndex];
 		restore(distanceMatrix);
 		return root;
 	}
@@ -95,11 +95,11 @@ public class HierarchicalCluster {
 	private void init() {
 		leafCount = new int[distanceMatrix.length];
 		joinDistance = new double[distanceMatrix.length];
-		nodes = new ClusterTreeNode[distanceMatrix.length];
+		nodes = new Clade[distanceMatrix.length];
 		for (int i = 0; i < distanceMatrix.length; i++) {
 			joinDistance[i] = 0.0; // not needed but it is clearer this way
 			leafCount[i] = 1;
-			nodes[i] = new ClusterTreeNode(leafLabels[i], 0);
+			nodes[i] = new Clade(leafLabels[i], 0);
 		}
 	}
 
@@ -191,7 +191,7 @@ public class HierarchicalCluster {
 		nodes[one].setBranchLength(currentCloseness - joinDistance[one]);
 		nodes[two].setBranchLength(currentCloseness - joinDistance[two]);
 		
-		ClusterTreeNode joinedNode = new ClusterTreeNode();
+		Clade joinedNode = new Clade();
 		joinedNode.add(nodes[two]);
 		joinedNode.add(nodes[one]);		
 		nodes[two] = joinedNode;
@@ -240,7 +240,7 @@ public class HierarchicalCluster {
 			hc.setLinkageMethod(method);
 			if (isPearson)
 				hc.similarityToDistance();
-			ClusterTreeNode root = hc.cluster();
+			Clade root = hc.cluster();
 			if (isPearson)
 				hc.similarityToDistance();
 			
@@ -274,7 +274,7 @@ public class HierarchicalCluster {
 	/**
 	 * The distance matrix reordered based on the clustering order.
 	 */
-	public double[][] getReorderedMatrix(ClusterTreeNode root) {		
+	public double[][] getReorderedMatrix(Clade root) {		
 		return getReorderedMatrix(getReorderedLabels(root));
 	}
 	
@@ -303,14 +303,14 @@ public class HierarchicalCluster {
 		return d;
 	}
 	
-	public String[] getReorderedLabels(ClusterTreeNode root) {
+	public String[] getReorderedLabels(Clade root) {
 		String[] labels = new String[leafLabels.length];
 		int k = 0;
 
 		// iterate the tree, depth first
 		Enumeration e = root.depthFirstEnumeration();
 		while(e.hasMoreElements()) {
-			ClusterTreeNode node = (ClusterTreeNode)e.nextElement();
+			Clade node = (Clade)e.nextElement();
 			if(node.isLeaf() && node.getUserObject() != null)
 				labels[k++] = node.toString();			
 		}

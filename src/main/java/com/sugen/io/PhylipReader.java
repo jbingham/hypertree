@@ -4,7 +4,7 @@ import java.util.Collection;
 
 import javax.swing.tree.DefaultTreeModel;
 
-import com.sugen.util.ClusterTreeNode;
+import com.sugen.util.Clade;
 
 /**
  * Parse Phylip treefiles.
@@ -31,7 +31,7 @@ public class PhylipReader extends TreeReader {
         while((line = readLine()) != null)
             completeTree.append(line);
 
-        ClusterTreeNode root = new ClusterTreeNode();
+        Clade root = new Clade();
         root.setBranchLength(0);
         parseTree(completeTree.toString(), 0, root);
 
@@ -51,14 +51,14 @@ public class PhylipReader extends TreeReader {
      * @param index - current index in the input String
      * @return index of character after the end of the subtree
      */
-    protected int parseTree(String input, int index, ClusterTreeNode root) {
+    protected int parseTree(String input, int index, Clade root) {
         //root has children
         if(input.charAt(index) == '(') {
             //parse children of node, recursively parsing each child's subtree
             int retval = index;
             do {
                 //add child node to root
-                ClusterTreeNode node = new ClusterTreeNode();
+                Clade node = new Clade();
                 root.insert(node, root.getChildCount());
                 retval = parseTree(input, retval + 1, node);
             }
@@ -89,7 +89,7 @@ public class PhylipReader extends TreeReader {
      * @return index of character after leaf
      */
     protected int parseLeaf(String input, int leafLabelStart,
-                            ClusterTreeNode leaf) {
+                            Clade leaf) {
         int branchLengthStart = parseLeafLabel(input, leafLabelStart, leaf);
         int end = branchLengthStart;
 //        System.err.println("leaf: " + leaf.getUserObject());
@@ -109,7 +109,7 @@ public class PhylipReader extends TreeReader {
      * @return index of character after leaf
      */
     protected int parseLeafLabel(String input, int start,
-                                 ClusterTreeNode leaf) {
+                                 Clade leaf) {
         int nextColon = input.indexOf(':', start);
         int nextComma = input.indexOf(',', start);
         int nextParen = input.indexOf(')', start);
@@ -137,7 +137,7 @@ public class PhylipReader extends TreeReader {
     protected int parseBranchLength(
     		String input, 
     		int start,
-            ClusterTreeNode leaf) {
+            Clade leaf) {
         int nextComma = input.indexOf(',', start);
         int closeParen = input.indexOf(')', start);
         int end;
@@ -154,7 +154,7 @@ public class PhylipReader extends TreeReader {
         int closeBracket = input.indexOf(']', start);
         if(openBracket != -1 && openBracket < end && closeBracket != -1) {
             String replicates = input.substring(openBracket + 1, closeBracket);
-            leaf.setBootstrapReplicates(Double.parseDouble(replicates));
+            leaf.setConfidence(Double.parseDouble(replicates));
 //            System.err.println("Replicates: " + replicates);
             end = openBracket;
         }
@@ -176,7 +176,7 @@ public class PhylipReader extends TreeReader {
     * @param leaf - its branchLength is set from parsed input
     * @return index of character after leaf
     */
-    private int parseNodeLabel(String input, int end, ClusterTreeNode leaf) {
+    private int parseNodeLabel(String input, int end, Clade leaf) {
 //    	System.err.println("checkBootstrap: "
 //    			+ input.substring(Math.max(0, end-40), end)
 //    			+ input.charAt(end));

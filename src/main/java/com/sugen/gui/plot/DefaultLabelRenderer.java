@@ -13,27 +13,23 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
+import com.sugen.gui.ToolTippable;
+
 /**
  * Default implementation of a LabelRenderer.
  *
  * @author Jonathan Bingham
  */
-public class DefaultLabelRenderer
-    extends JComponent implements LabelRenderer {
-    //Label properties
-    /** @serial */
+public class DefaultLabelRenderer extends JComponent implements LabelRenderer {
+	private static final long serialVersionUID = 1L;
+	
     protected String text;
-    /** @serial */
+    protected Object dataObject;
     protected boolean isAdjusting;
-    /** @serial */
     protected boolean hasFocus;
-    /** @serial */
     protected boolean isSelected;
-    /** @serial */
     protected Component view;
-    /** @serial */
     protected int key = -1;
-    /** @serial */
     protected boolean isVisible;
 
     //Colors
@@ -72,10 +68,14 @@ public class DefaultLabelRenderer
     }
 
     public Component getRendererComponent(Component view,
-                                          Object dataObject, int key,
-                                          boolean isSelected, boolean hasFocus,
-                                          boolean isAdjusting,
-                                          boolean isVisible, Color color) {
+          Object dataObject, 
+          int key,
+          boolean isSelected, 
+          boolean hasFocus,
+          boolean isAdjusting,
+          boolean isVisible, 
+          Color color) {
+    	this.dataObject = dataObject;
         this.isAdjusting = isAdjusting;
         this.hasFocus = hasFocus;
         this.isSelected = isSelected;
@@ -103,14 +103,18 @@ public class DefaultLabelRenderer
             setForeground(color);
         }
         setText(dataObject);
-
+        
+        if (dataObject instanceof ToolTippable) {
+        	((JComponent)view).setToolTipText(
+        			((ToolTippable)dataObject).getToolTipText());
+        }
         return this;
     }
 
     public void setText(Object dataObject) {
         this.text = (dataObject == null || dataObject.equals("")) ?
             null : dataObject.toString();
-
+        
         //No size if adjusting and invisible
         if(isAdjusting && !isSelected && !hasFocus && !isVisible) {
             dimension.setSize(0, 0);

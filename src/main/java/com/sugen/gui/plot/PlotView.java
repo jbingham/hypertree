@@ -18,12 +18,11 @@ import com.sugen.util.*;
  *
  * @author Jonathan Bingham
  */
-public class PlotView
-    extends JComponent {
-    public final static String PROPERTY_FOCUS_KEY = "focus_key";
+public class PlotView extends JComponent {
+	private static final long serialVersionUID = 1L;
+	public final static String PROPERTY_FOCUS_KEY = "focus_key";
     public final static String PROPERTY_DATA_MODEL = "data_model";
 
-    /** @serial */
     protected Plot plot;
 
     /**
@@ -33,31 +32,22 @@ public class PlotView
     protected LinearTransform linearTransform;
 
     //Support for mouse controls
-    /** @serial */
     protected RotationUI rotationalUI;
-    /** @serial */
     protected MouseHandler mouseHandler;
 
     /** Index of focused object. */
-    /** @serial */
     protected int focus = -1;
 
     /** Radius of rendered points. */
-    /** @serial */
     protected int radius = 2;
 
     //Renderer
-    /** @serial */
     protected CellRendererPane rendererPane = new CellRendererPane();
-    /** @serial */
     protected LabelRenderer renderer = new DefaultLabelRenderer();
-    /** @serial */
     protected Dimension maxLabelSize = new Dimension(0, 0);
 
     /** When adjusting, render more roughly. */
-    /** @serial */
     protected boolean isAdjusting;
-    /** @serial */
     protected boolean isQuickPaint;
 
     /**
@@ -242,8 +232,12 @@ public class PlotView
             try {
                 mousePoint = e.getPoint();
                 int hover = labelAt(mousePoint);
-                if(hover != focus)
+                if(hover != focus) {
+                    setToolTipText(null);
                     setFocus(hover);
+                }
+                if (hover < 0)
+                	setToolTipText(null);
             }
             catch(NullPointerException npe) {}
         }

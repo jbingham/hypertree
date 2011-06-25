@@ -24,7 +24,7 @@ import com.sugen.gui.Icons;
 import com.sugen.gui.plot.PlotUI;
 import com.sugen.gui.plot.PlotView;
 import com.sugen.gui.plot.PlotViewUI;
-import com.sugen.util.ClusterTreeNode;
+import com.sugen.util.Clade;
 import com.sugen.util.DataModel;
 import com.sugen.util.TreeDataModel;
 
@@ -253,14 +253,14 @@ public class TreeViewUI extends PlotViewUI {
             //parent node a child of the previous
             TreeDataModel tree = (TreeDataModel)plotView.getDataModel();
             Object root = tree.getRoot();
-            ClusterTreeNode currentNode = (ClusterTreeNode)node;
-            ClusterTreeNode parent = (ClusterTreeNode)node.getParent();
-            ClusterTreeNode child;
+            Clade currentNode = (Clade)node;
+            Clade parent = (Clade)node.getParent();
+            Clade child;
             while(currentNode != root) {
                 child = currentNode;
                 currentNode = parent;
                 if(parent != null)
-                    parent = (ClusterTreeNode)parent.getParent();
+                    parent = (Clade)parent.getParent();
 
                 if(currentNode != null) {
                     if(currentNode.isNodeChild(child))
@@ -306,9 +306,9 @@ public class TreeViewUI extends PlotViewUI {
             Iterator iter = dataModel.iterator();
             while(iter.hasNext()) {
                 Object obj = iter.next();
-                if(!(obj instanceof ClusterTreeNode))
+                if(!(obj instanceof Clade))
                     continue;
-                ClusterTreeNode node = (ClusterTreeNode)obj;
+                Clade node = (Clade)obj;
                 double oldValue = node.getBranchLength();
                 if(oldValue >= 0)
                     node.setBranchLength(
@@ -326,9 +326,9 @@ public class TreeViewUI extends PlotViewUI {
             Iterator iter = dataModel.iterator();
             while(iter.hasNext()) {
                 Object obj = iter.next();
-                if(!(obj instanceof ClusterTreeNode))
+                if(!(obj instanceof Clade))
                     continue;
-                ClusterTreeNode node = (ClusterTreeNode)obj;
+                Clade node = (Clade)obj;
                 double oldValue = node.getBranchLength();
                 if(oldValue >= 0)
                     node.setBranchLength(

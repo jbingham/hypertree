@@ -6,7 +6,7 @@ import java.io.StringWriter;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeModel;
 
-import com.sugen.util.ClusterTreeNode;
+import com.sugen.util.Clade;
 import com.sugen.util.TreeDataModel;
 
 /**
@@ -50,7 +50,7 @@ public class PhylipWriter
 
         //Children
         for(int i = 0, numChildren = node.getChildCount(); i < numChildren; i++) {
-            writeTree((ClusterTreeNode)node.getChildAt(i));
+            writeTree((Clade)node.getChildAt(i));
             if(i < numChildren - 1)
                 writer.write(",\n");
         }
@@ -62,13 +62,13 @@ public class PhylipWriter
             writer.write(node.toString());
 
         //Branch length
-        if(!node.isRoot() && node instanceof ClusterTreeNode) {
+        if(!node.isRoot() && node instanceof Clade) {
             writer.write(":");
-            ClusterTreeNode branch = (ClusterTreeNode)node;
+            Clade branch = (Clade)node;
             double length = branch.getBranchLength();
             writer.write(String.valueOf(length));
-            if(branch.getBootstrapReplicates() != 0)
-                writer.write("[" + branch.getBootstrapReplicates() + "]");
+            if(branch.getConfidence() != 0)
+                writer.write("[" + branch.getConfidence() + "]");
         }
     }
 }

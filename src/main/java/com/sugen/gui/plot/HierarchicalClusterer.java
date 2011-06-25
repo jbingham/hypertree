@@ -32,7 +32,7 @@ import com.sugen.gui.AppBean;
 import com.sugen.gui.Icons;
 import com.sugen.gui.SwingWorker;
 import com.sugen.gui.io.ReaderUI;
-import com.sugen.util.ClusterTreeNode;
+import com.sugen.util.Clade;
 import com.sugen.util.HierarchicalCluster;
 import com.sun.imageio.plugins.png.PNGImageWriter;
 import com.sun.imageio.plugins.png.PNGImageWriterSpi;
@@ -78,7 +78,7 @@ public class HierarchicalClusterer implements AppBean {
 	private HyperTree hypertree;
 	private Properties properties;
 	private HierarchicalCluster cluster;
-	private ClusterTreeNode root; // currently open
+	private Clade root; // currently open
 
 	/**
 	 * Constructor.
@@ -307,7 +307,7 @@ public class HierarchicalClusterer implements AppBean {
 	 * @param distances square matrix
 	 * @param labels a label for each row/column in the distance matrix
 	 */
-	public ClusterTreeNode cluster(double[][] distances, String[] labels) {
+	public Clade cluster(double[][] distances, String[] labels) {
 		Object result = JOptionPane.showInputDialog(hypertree.getMainWindow(), "Linkage",
 				"Select Linkage Method", JOptionPane.OK_CANCEL_OPTION, null,
 				HierarchicalCluster.LINKAGE_METHODS, HierarchicalCluster.AVERAGE);
@@ -324,7 +324,7 @@ public class HierarchicalClusterer implements AppBean {
 	 * @param labels a label for each row/column in the distance matrix
 	 * @param linkage AVERAGE, COMPLETE or SINGLE
 	 */
-	private ClusterTreeNode clusterAndDisplay(double[][] distances,
+	private Clade clusterAndDisplay(double[][] distances,
 			String[] labels, String linkage) {
 		return cluster(distances, labels, linkage);
 	}
@@ -336,7 +336,7 @@ public class HierarchicalClusterer implements AppBean {
 	 * @param labels a label for each row/column in the distance matrix
 	 * @param linkage AVERAGE, COMPLETE or SINGLE
 	 */
-	public ClusterTreeNode cluster(double[][] distances, 
+	public Clade cluster(double[][] distances, 
 			String[] labels, String linkage) {
 		propertySupport.firePropertyChange(PROPERTY_STATUS_MESSAGE, null,
         		"Clustering");

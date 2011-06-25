@@ -70,17 +70,18 @@ import com.sugen.gui.form.FormDialog;
 import com.sugen.gui.form.FormException;
 import com.sugen.gui.io.ColorCodeUI;
 import com.sugen.util.DataModel;
+import com.sugen.util.TreeDataModel;
 
 /**
  * UI controls for various plot views.
  *
  * @author Jonathan Bingham
  */
-public class PlotViewUI
-    extends JScrollPane
+public class PlotViewUI extends JScrollPane
     implements AppBean, SelectionListener, Editable,
         Printable, Closeable, Serializable {
-    public final static String PROPERTY_FONT = "label.font";
+	private static final long serialVersionUID = 1L;
+	public final static String PROPERTY_FONT = "label.font";
     public final static String PROPERTY_FONT_SIZE = "label.font.size";
     public final static String PROPERTY_FONT_STYLE = "label.font.style";
     public final static String PROPERTY_LABELS_VISIBLE = "label.visible";
@@ -354,8 +355,10 @@ public class PlotViewUI
             }
             //As fired by, eg, TreeReaderWriterUI
             else if(e.getNewValue() instanceof DataModel) {
-                //System.err.println("PlotViewUI.propertyChange()");
+//                System.err.println("PlotViewUI.propertyChange(): " + e.getNewValue());
                 DataModel model = (DataModel)e.getNewValue();
+                if (model instanceof TreeDataModel)
+                	setColors(((TreeDataModel)model).getColors());
                 setDataModel(model);
             }
         }
@@ -911,8 +914,9 @@ public class PlotViewUI
 
     protected void setColor(Object dataObj, Color color) {
         plotView.setColor(dataObj, color);
-        if(dataObj != null)
+        if(dataObj != null) {
             colorUI.setColor(dataObj.toString(), color);
+        }
     }
 
     public void rename(Object dataObj) {

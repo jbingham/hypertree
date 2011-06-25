@@ -4,7 +4,7 @@ import java.awt.geom.Point2D;
 import java.util.*;
 import javax.swing.tree.*;
 
-import com.sugen.util.ClusterTreeNode;
+import com.sugen.util.Clade;
 import com.sugen.util.TreeDataModel;
 import com.sugen.gui.plot.*;
 
@@ -85,8 +85,8 @@ public class RadialTreePlot
 
             //Child branch length
             double branchLength = 1;
-            if (child instanceof ClusterTreeNode)
-                branchLength = ( (ClusterTreeNode) child).getBranchLength();
+            if (child instanceof Clade)
+                branchLength = ( (Clade) child).getBranchLength();
 
             //Arc for the child node
             double childArcSpan = arcSpan * childLeafCount / leafCount;
@@ -120,7 +120,7 @@ public class RadialTreePlot
         if (root == null)
             return 0;
         //If no branch lengths, depth is accurately given by root.getDepth()
-        if (! (root instanceof ClusterTreeNode))
+        if (! (root instanceof Clade))
             return root.getDepth();
 
         //Find the maximum depth by checking all tree paths.
@@ -128,11 +128,11 @@ public class RadialTreePlot
         Map nodeDepth = new HashMap();
         Enumeration depthFirst = root.depthFirstEnumeration();
         while (depthFirst.hasMoreElements()) {
-            ClusterTreeNode node = (ClusterTreeNode) depthFirst.nextElement();
+            Clade node = (Clade) depthFirst.nextElement();
             double currentNodeDepth = node.getBranchLength();
 
             //Add parent's depth
-            ClusterTreeNode parent = (ClusterTreeNode) node.getParent();
+            Clade parent = (Clade) node.getParent();
             Double depth = null;
             if (parent != null)
                 depth = (Double) nodeDepth.get(parent);

@@ -31,7 +31,7 @@ import com.sugen.io.MultiTreeReader;
 import com.sugen.io.PhylipReader;
 import com.sugen.io.PhylipWriter;
 import com.sugen.io.TreeReader;
-import com.sugen.util.ClusterTreeNode;
+import com.sugen.util.Clade;
 import com.sugen.util.TreeDataModel;
 
 /**
@@ -264,7 +264,7 @@ public class HyperTree implements Runnable {
 	/**
 	 * The root of the tree to display.
 	 */
-	public void setTree(ClusterTreeNode root) {
+	public void setTree(Clade root) {
 		TreeDataModel model = new TreeDataModel();
 		model.setRoot(root);
 		treeViewUI.setDataModel(model);
