@@ -11,6 +11,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import com.sugen.util.Clade;
+import com.sugen.util.Clade.Confidence;
 
 /** 
  * Read phyloxml format from http://www.phyloxml.org.
@@ -53,8 +54,8 @@ public class PhyloXmlReader extends TreeReader {
 		private Clade parent;
 		private Clade node;
 		
-		private boolean isPhylogeny;
 		private boolean isClade;
+		
 		private boolean isName;
 		private boolean isLength;
 		private boolean isConfidence;
@@ -71,6 +72,9 @@ public class PhyloXmlReader extends TreeReader {
 		private boolean isAccession;
 		private boolean isLocation;
 		
+		private boolean isEvents;
+		private boolean isAnnotation;
+		
 		private boolean isRed;
 		private boolean isGreen;
 		private boolean isBlue;
@@ -83,7 +87,6 @@ public class PhyloXmlReader extends TreeReader {
 				return;
 			
 			if (qName.equals("phylogeny")) {
-				isPhylogeny = true;
 //				System.err.println("phylogeny: ");
 				parent = new Clade();
 	        	parent.setBranchLength(0.0f); // not a real clade
@@ -117,7 +120,21 @@ public class PhyloXmlReader extends TreeReader {
 				isLength = true;				
 			} else if (qName.equals("confidence")) {
 				isConfidence = true;
-				
+
+				if (isClade && !isEvents && !isAnnotation) {
+					Clade c = node == null ? parent : node;
+					Confidence conf = new Confidence();
+	    			c.getConfidences().add(conf);
+					
+			        if (attributes != null && attributes.getLength() > 0) {
+			        	for (int i = 0; i < attributes.getLength(); ++i) {
+			        		if (attributes.getQName(i).equals("type")) {
+			        			conf.setType(attributes.getValue(i));
+			        		}
+			        	}
+			        }
+				}
+		        				
 			} else if (qName.equals("taxonomy")) {
 				isTaxonomy = true;
 			} else if (qName.equals("code")) {
@@ -138,6 +155,12 @@ public class PhyloXmlReader extends TreeReader {
 			} else if (qName.equals("location")) {
 				isLocation = true;
 				
+			} else if (qName.equals("events")) {
+				isEvents = true;
+
+			} else if (qName.equals("annotation")) {
+				isAnnotation = true;
+
 			} else if (qName.equals("red")) {
 				isRed = true;
 			} else if (qName.equals("green")) {
@@ -152,10 +175,7 @@ public class PhyloXmlReader extends TreeReader {
 			if (depth < 0)
 				return;
 
-			if (qName.equals("phylogeny")) {
-				isPhylogeny = false;
-				
-			} else if (qName.equals("clade")) {
+			if (qName.equals("clade")) {
 				isClade = false;
 				--depth;
 				
@@ -164,7 +184,8 @@ public class PhyloXmlReader extends TreeReader {
 					depth = -1; 
 				
 				node = parent;
-				parent = (Clade)node.getParent();			
+				parent = (Clade)node.getParent();
+				
 			} else if (qName.equals("name")) {
 				isName = false;				
 			} else if (qName.equals("branch_length")) {
@@ -194,6 +215,12 @@ public class PhyloXmlReader extends TreeReader {
 			} else if (qName.equals("location")) {
 				isLocation = false;
 				
+			} else if (qName.equals("events")) {
+				isEvents = false;
+
+			} else if (qName.equals("annotation")) {
+				isAnnotation = false;
+
 			} else if (qName.equals("red")) {
 				isRed = false;
 			} else if (qName.equals("green")) {
@@ -216,11 +243,12 @@ public class PhyloXmlReader extends TreeReader {
 			} else if (isLength) {
 				node.setBranchLength(Double.parseDouble(s));
 				
-			} else if (isConfidence) {
-				if (node != null)
-					node.setConfidence(Double.parseDouble(s));
-				else
-					parent.setConfidence(Double.parseDouble(s));
+			} else if (isConfidence && isClade && !isEvents && !isAnnotation) {
+//				System.err.println("confidence: " + s);
+				
+				Clade c = node == null ? parent : node;
+				c.getConfidences().get(c.getConfidences().size() - 1)
+					.setValue(Double.parseDouble(s));
 
 			} else if (isCode) {
 				node.getTaxonomy().setCode(s);							
@@ -241,6 +269,7 @@ public class PhyloXmlReader extends TreeReader {
 				node.getSequence().setName(s);
 			} else if (isLocation) {
 				node.getSequence().setLocation(s);
+				
 			} else if (isUri && isSequence) {
 				node.getSequence().setUri(s);
 

@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.geom.AffineTransform;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
@@ -20,7 +21,9 @@ import javax.swing.JPopupMenu;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.undo.AbstractUndoableEdit;
 
+import com.sugen.gui.BrowserLauncher;
 import com.sugen.gui.Icons;
+import com.sugen.gui.SwingWorker;
 import com.sugen.gui.plot.PlotUI;
 import com.sugen.gui.plot.PlotView;
 import com.sugen.gui.plot.PlotViewUI;
@@ -34,9 +37,11 @@ import com.sugen.util.TreeDataModel;
  *
  * @author Jonathan Bingham
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class TreeViewUI extends PlotViewUI {
-
-    //Used by the chooseStyleAction as well as setStyle(String).
+	private static final long serialVersionUID = 1L;
+	
+	//Used by the chooseStyleAction as well as setStyle(String).
     public static final String PROPERTY_TREE_STYLE = "tree_style";
     public static final String STYLE_RADIAL = "Radial Tree";
     public static final String STYLE_LINEAR = "Linear Tree";
@@ -69,7 +74,7 @@ public class TreeViewUI extends PlotViewUI {
         setStyle(STYLE_HYPERBOLIC);  // default view to display
     }
 
-    protected java.util.List getActionList() {
+	protected java.util.List getActionList() {
         java.util.List actions = super.getActionList();
 
         super.getFontAction().putValue(KEY_SEPARATOR_AFTER, Boolean.TRUE);
@@ -81,11 +86,17 @@ public class TreeViewUI extends PlotViewUI {
 
         actions.add(rerootAction);
         actions.add(transformAction);
+                
+        actions.add(taxonomyUrlAction);
+        actions.add(sequenceUrlAction);
+        sequenceUrlAction.putValue(KEY_SEPARATOR_AFTER, Boolean.TRUE);
+        
         return actions;
     }
 
     /** @serial */
     protected Action chooseStyleAction = new AbstractAction() {
+    	private static final long serialVersionUID = 1L;
         {
             putValue(NAME, new String[] {STYLE_LINEAR,
                      STYLE_RADIAL, STYLE_HYPERBOLIC});
@@ -104,6 +115,64 @@ public class TreeViewUI extends PlotViewUI {
 
     public Action getChooseStyleAction() {
         return chooseStyleAction;
+    }
+
+    protected Action taxonomyUrlAction =
+        new AbstractAction("Open Taxonomy URL...", Icons.get("emptyIcon24.gif")) {
+		private static final long serialVersionUID = 1L;
+        {
+            putValue(KEY_MENU, FILE_MENU);
+            putValue(KEY_LOCATION, VALUE_MENU_ONLY);
+        }
+
+        public void actionPerformed(ActionEvent e) {
+        	new SwingWorker() {
+        		public Object construct() {
+		            try {
+		            	Clade node = (Clade)getPlotView().getSelectionModel()
+		            		.getCollection().iterator().next();
+		            	String url = node.getTaxonomy().getUri();
+						BrowserLauncher.openURL(url);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					return null;
+				}
+			}.start();         
+        }
+    };
+
+    public Action getTaxonomyUrlAction() {
+        return taxonomyUrlAction;
+    }
+
+    protected Action sequenceUrlAction =
+        new AbstractAction("Open Sequence URL...", Icons.get("emptyIcon24.gif")) {
+		private static final long serialVersionUID = 1L;
+        {
+            putValue(KEY_MENU, FILE_MENU);
+            putValue(KEY_LOCATION, VALUE_MENU_ONLY);
+        }
+
+        public void actionPerformed(ActionEvent e) {
+        	new SwingWorker() {
+        		public Object construct() {
+		            try {
+		            	Clade node = (Clade)getPlotView().getSelectionModel()
+		            		.getCollection().iterator().next();
+		            	String url = node.getSequence().getUri();
+						BrowserLauncher.openURL(url);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					return null;
+				}
+			}.start();         
+        }
+    };
+
+    public Action getSequenceUrlAction() {
+        return sequenceUrlAction;
     }
 
     public void setStyle(String newStyle) {
@@ -152,6 +221,16 @@ public class TreeViewUI extends PlotViewUI {
             rerootAction.setEnabled(hasData && hasSelection);
 
             chooseStyleAction.setEnabled(getPlotView().getPlot() != null);
+            
+            Clade node = (Clade)
+            	(hasSelection && plotView.getSelectionModel().size() == 1
+            	? plotView.getSelectionModel().iterator().next()
+            	: null);
+            
+            taxonomyUrlAction.setEnabled(
+            		node != null && node.getTaxonomy().getUri() != null);
+            sequenceUrlAction.setEnabled(
+            		node != null && node.getSequence().getUri() != null);
         }
         catch(NullPointerException npe) {
             npe.printStackTrace();
@@ -175,6 +254,7 @@ public class TreeViewUI extends PlotViewUI {
     /** @serial */
     protected Action transformAction = new AbstractAction("Log Transform...",
         Icons.get("emptyIcon24.gif")) {
+    	private static final long serialVersionUID = 1L;
         {
             putValue(KEY_MENU, EDIT_MENU);
             putValue(KEY_LOCATION, VALUE_MENU_ONLY);
@@ -196,9 +276,10 @@ public class TreeViewUI extends PlotViewUI {
 
     /** @serial */
     protected Action rerootAction = new RerootAction();
-    protected class RerootAction
-        extends AbstractAction {
-        public RerootAction() {
+    protected class RerootAction extends AbstractAction {
+    	private static final long serialVersionUID = 1L;
+
+    	public RerootAction() {
             super("Reroot...", Icons.get("emptyIcon24.gif"));
             putValue(KEY_MENU, EDIT_MENU);
             putValue(KEY_LOCATION, VALUE_MENU_ONLY);
@@ -236,8 +317,8 @@ public class TreeViewUI extends PlotViewUI {
         firePropertyChange(PROPERTY_DATA, null, plotView.getDataModel());
     }
 
-    protected class UndoableReroot
-        extends AbstractUndoableEdit {
+    protected class UndoableReroot extends AbstractUndoableEdit {
+    	private static final long serialVersionUID = 1L;
         private DefaultMutableTreeNode oldRootNode;
         private DefaultMutableTreeNode newRootNode;
 
@@ -292,8 +373,8 @@ public class TreeViewUI extends PlotViewUI {
         firePropertyChange(PROPERTY_DATA, null, plotView.getDataModel());
     }
 
-    protected class UndoableTransform
-        extends AbstractUndoableEdit {
+    protected class UndoableTransform extends AbstractUndoableEdit {
+    	private static final long serialVersionUID = 1L;
         private int MULTIPLIER = 10000;
         private int CONSTANT = 2;
 
@@ -371,6 +452,9 @@ public class TreeViewUI extends PlotViewUI {
     protected JPopupMenu getLabelPopup() {
         JPopupMenu popup = super.getLabelPopup();
         popup.add(rerootAction);
+        popup.addSeparator();
+        popup.add(taxonomyUrlAction);
+        popup.add(sequenceUrlAction);
         return popup;
     }
 

@@ -77,6 +77,7 @@ import com.sugen.util.TreeDataModel;
  *
  * @author Jonathan Bingham
  */
+@SuppressWarnings({"unchecked", "rawtypes"})
 public class PlotViewUI extends JScrollPane
     implements AppBean, SelectionListener, Editable,
         Printable, Closeable, Serializable {
@@ -377,9 +378,9 @@ public class PlotViewUI extends JScrollPane
             colorUI.propertyChange(e);
     }
 
-    /** @serial */
     protected Action printAction = new AbstractAction("Print...",
         Icons.get("print24.gif")) {
+		private static final long serialVersionUID = 1L;
         {
             putValue(KEY_MENU, FILE_MENU);
             putValue(KEY_ACCELERATOR,
@@ -400,8 +401,8 @@ public class PlotViewUI extends JScrollPane
         return printAction;
     }
 
-    /** @serial */
     protected Action printPreviewAction = new AbstractAction("Print Preview") {
+		private static final long serialVersionUID = 1L;
         {
             putValue(KEY_MENU, FILE_MENU);
             putValue(KEY_LOCATION, VALUE_MENU_ONLY);
@@ -421,9 +422,9 @@ public class PlotViewUI extends JScrollPane
         return printPreviewAction;
     }
 
-    /** @serial */
     protected Action fontAction = new AbstractAction("Font...",
         Icons.get("font24.gif")) {
+		private static final long serialVersionUID = 1L;
         {
             putValue(KEY_MENU, EDIT_MENU);
             putValue(KEY_LOCATION, VALUE_MENU_ONLY);
@@ -443,9 +444,9 @@ public class PlotViewUI extends JScrollPane
         return fontAction;
     }
 
-    /** @serial */
     protected Action distanceAction = new AbstractAction("Distance...",
         Icons.get("emptyIcon24.gif")) {
+		private static final long serialVersionUID = 1L;
         {
             putValue(KEY_MENU, EDIT_MENU);
             putValue(KEY_LOCATION, VALUE_MENU_ONLY);
@@ -465,9 +466,9 @@ public class PlotViewUI extends JScrollPane
         return distanceAction;
     }
 
-    /** @serial */
     protected Action zoomInAction = new AbstractAction("Zoom In",
         Icons.get("zoomIn24.gif")) {
+		private static final long serialVersionUID = 1L;
         {
             putValue(KEY_MENU, VIEW_MENU);
             putValue(KEY_ACCELERATOR,
@@ -483,9 +484,9 @@ public class PlotViewUI extends JScrollPane
         return zoomInAction;
     }
 
-    /** @serial */
     protected Action zoomOutAction = new AbstractAction("Zoom Out",
         Icons.get("zoomOut24.gif")) {
+		private static final long serialVersionUID = 1L;
         {
             putValue(KEY_MENU, VIEW_MENU);
             putValue(KEY_ACCELERATOR,
@@ -501,10 +502,10 @@ public class PlotViewUI extends JScrollPane
         return zoomOutAction;
     }
 
-    /** @serial */
     protected Action fitToViewAction = new AbstractAction("Fit to View",
         Icons.get("emptyIcon24.gif")) {
-        {
+		private static final long serialVersionUID = 1L;
+		{
             putValue(KEY_MENU, VIEW_MENU);
             putValue(KEY_LOCATION, VALUE_MENU_ONLY);
         }
@@ -518,9 +519,9 @@ public class PlotViewUI extends JScrollPane
         return fitToViewAction;
     }
 
-    /** @serial */
     protected Action selectAction = new AbstractAction("Find...",
         Icons.get("find24.gif")) {
+		private static final long serialVersionUID = 1L;
         {
             putValue(KEY_MENU, EDIT_MENU);
         }
@@ -539,9 +540,9 @@ public class PlotViewUI extends JScrollPane
         return selectAction;
     }
 
-    /** @serial */
     protected Action selectNeighborsAction =
         new AbstractAction("Select Neighbors...", Icons.get("emptyIcon24.gif")) {
+		private static final long serialVersionUID = 1L;
         {
             putValue(KEY_MENU, EDIT_MENU);
             putValue(KEY_LOCATION, VALUE_MENU_ONLY);
@@ -563,6 +564,7 @@ public class PlotViewUI extends JScrollPane
     
     protected Action copyAction = new AbstractAction(
     		"Copy", Icons.get("copy24.gif")) {
+		private static final long serialVersionUID = 1L;
         {
             putValue(KEY_MENU, EDIT_MENU);
             putValue(KEY_ACCELERATOR,
@@ -581,9 +583,9 @@ public class PlotViewUI extends JScrollPane
     	}
     };
 
-    /** @serial */
     protected Action colorAction = new AbstractAction("Color...",
         Icons.get("color24.gif")) {
+		private static final long serialVersionUID = 1L;
         {
             putValue(KEY_MENU, EDIT_MENU);
             //putValue(KEY_LOCATION, VALUE_MENU_ONLY);
@@ -607,8 +609,8 @@ public class PlotViewUI extends JScrollPane
         return colorUI;
     }
 
-    /** @serial */
     protected Action viewLabelsAction = new AbstractAction("Labels") {
+		private static final long serialVersionUID = 1L;
         {
             putValue(KEY_MENU, VIEW_MENU);
             putValue(KEY_LOCATION, VALUE_MENU_ONLY);
@@ -630,7 +632,8 @@ public class PlotViewUI extends JScrollPane
     }
 
     protected Action quickPaintAction = new AbstractAction("Quick Draw") {
-        {
+		private static final long serialVersionUID = 1L;
+		{
             putValue(KEY_MENU, VIEW_MENU);
             putValue(KEY_LOCATION, VALUE_MENU_ONLY);
             putValue(KEY_ACTION_TYPE, VALUE_TOGGLE_ACTION);
@@ -642,9 +645,9 @@ public class PlotViewUI extends JScrollPane
         }
     };
 
-    /** @serial */
     protected Action labelAction = new AbstractAction("Rename...",
         Icons.get("emptyIcon24.gif")) {
+		private static final long serialVersionUID = 1L;
         {
             putValue(KEY_MENU, EDIT_MENU);
             putValue(KEY_LOCATION, VALUE_MENU_ONLY);
@@ -661,9 +664,9 @@ public class PlotViewUI extends JScrollPane
         return labelAction;
     }
 
-    /** @serial */
     protected Action rotateAction = new AbstractAction("Rotate...",
         Icons.get("emptyIcon24.gif")) {
+		private static final long serialVersionUID = 1L;
         {
             putValue(KEY_MENU, EDIT_MENU);
             putValue(KEY_LOCATION, VALUE_MENU_ONLY);
@@ -709,8 +712,8 @@ public class PlotViewUI extends JScrollPane
         dialog.showDialog();
     }
 
-    protected class SelectForm
-        extends Form {
+    protected class SelectForm extends Form {
+		private static final long serialVersionUID = 1L;
         transient private JList list;
 
         SelectForm(FormDialog dialog) {
@@ -775,8 +778,8 @@ public class PlotViewUI extends JScrollPane
     /**
      * Set color code as read from ColorCodeUI Properties file.
      */
-    protected class UndoableColorCode
-        extends AbstractUndoableEdit {
+    protected class UndoableColorCode extends AbstractUndoableEdit {
+		private static final long serialVersionUID = 1L;
         transient private Map colors = new HashMap();
 
         UndoableColorCode(boolean propagateColors) {
@@ -862,8 +865,8 @@ public class PlotViewUI extends JScrollPane
         editor.addEdit(new UndoableColor(selections, color));
     }
 
-    protected class UndoableColor
-        extends AbstractUndoableEdit {
+    protected class UndoableColor extends AbstractUndoableEdit {
+		private static final long serialVersionUID = 1L;
         transient private Collection selections;
         transient private Map oldColors;
         transient private Color color;
@@ -930,8 +933,8 @@ public class PlotViewUI extends JScrollPane
         firePropertyChange(PROPERTY_DATA, null, plotView.getDataModel());
     }
 
-    protected class UndoableLabel
-        extends AbstractUndoableEdit {
+    protected class UndoableLabel extends AbstractUndoableEdit {
+		private static final long serialVersionUID = 1L;
         transient private Object dataObj;
         transient private Object oldLabel;
 
@@ -1168,8 +1171,8 @@ public class PlotViewUI extends JScrollPane
         plotView.refresh(true);
     }
 
-    protected class UndoableFontChange
-        extends AbstractUndoableEdit {
+    protected class UndoableFontChange extends AbstractUndoableEdit {
+		private static final long serialVersionUID = 1L;
         transient private Font newFont;
         transient private Font oldFont;
 
