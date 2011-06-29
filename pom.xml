@@ -4,7 +4,7 @@
 	<groupId>com.sugen</groupId>
 	<artifactId>hypertree</artifactId>
 	<name>hypertree</name>
-  <version>1.2.2</version>
+  <version>1.2.3</version>
 	<build>
     <plugins>
       <plugin>
