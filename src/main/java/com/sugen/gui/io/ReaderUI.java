@@ -56,17 +56,14 @@ import com.sugen.util.CollectionModel;
  * @author Jonathan Bingham
  */
 public class ReaderUI implements AppBean, Closeable, Serializable {
-    public final static String PROPERTY_PATH = "path";
+	private static final long serialVersionUID = 1L;
 
-    /** @serial */
+	public final static String PROPERTY_PATH = "path";
+
     protected Frame owner;
-    /** @serial */
     protected Object reader = Boolean.TRUE;
-    /** @serial */
     protected ResourceBundle resources;
-    /** @serial */
     protected Properties properties;
-    /** @serial */
     protected String currentPath;
 
     /**
@@ -77,15 +74,11 @@ public class ReaderUI implements AppBean, Closeable, Serializable {
 
     /**
      * Prefix of keys read from properties file. Must be set in subclasses.
-     * @serial
      */
     protected String prefix = "reader";
-    /** @serial */
     protected int filesRemembered = 4;
-    /** @serial */
-    protected List recentFiles = new ArrayList(filesRemembered);
-    /** @serial */
-    protected Map recentReaders = new HashMap(filesRemembered + 1);
+    protected List<String> recentFiles = new ArrayList<String>(filesRemembered);
+    protected Map<String, String> recentReaders = new HashMap<String, String>(filesRemembered + 1);
 
     public ReaderUI() {
         try {
@@ -137,9 +130,9 @@ public class ReaderUI implements AppBean, Closeable, Serializable {
         }
     }
 
-    /** @serial */
     protected Action openAction = new AbstractAction("Open...",
         Icons.get("open24.gif")) {
+    	private static final long serialVersionUID = 1L;
         {
             putValue(KEY_MENU, "File");
             putValue(KEY_ACCELERATOR,
@@ -152,11 +145,10 @@ public class ReaderUI implements AppBean, Closeable, Serializable {
         }
     };
 
-    /** @serial */
     protected RecentFilesAction recentFilesAction = new RecentFilesAction();
 
-    protected class RecentFilesAction
-        extends AbstractAction {
+    protected class RecentFilesAction extends AbstractAction {
+    	private static final long serialVersionUID = 1L;
         RecentFilesAction() {
             putValue(KEY_MENU, FILE_MENU);
             putValue(KEY_LOCATION, VALUE_MENU_ONLY);
@@ -241,11 +233,12 @@ public class ReaderUI implements AppBean, Closeable, Serializable {
         if(reader == null)
             return null;
 
+        File file = null;
         try {
             JFileChooser chooser = new JFileChooser(getPath());
             if(chooser.showOpenDialog(owner) != JFileChooser.APPROVE_OPTION)
                 return null;
-            File file = chooser.getSelectedFile();
+            file = chooser.getSelectedFile();
             currentPath = file.getAbsolutePath();
 
             propertySupport.firePropertyChange(PROPERTY_STATUS_MESSAGE, null,
@@ -262,10 +255,16 @@ public class ReaderUI implements AppBean, Closeable, Serializable {
             return data;
         }
         catch(Exception e) {
-            propertySupport.firePropertyChange(PROPERTY_STATUS_MESSAGE, null,
-                                               e.getClass().getName() + " " +
-                                               e.getMessage());
+            propertySupport.firePropertyChange(
+            	PROPERTY_STATUS_MESSAGE, null, 
+            	e.getClass().getName() + " " +  e.getMessage());
             e.printStackTrace();
+            JOptionPane.showMessageDialog(
+        		owner, 
+        		"Error opening file " + (file == null ? null : file.getName())
+        		    + ".", 
+        		"Error", 
+        		JOptionPane.ERROR_MESSAGE);
             return null;
         }
         finally {
@@ -434,7 +433,7 @@ public class ReaderUI implements AppBean, Closeable, Serializable {
         collectionModel.removeListener(listener);
     }
 
-    public Collection getData() {
+    public Collection<?> getData() {
         return collectionModel;
     }
 }
